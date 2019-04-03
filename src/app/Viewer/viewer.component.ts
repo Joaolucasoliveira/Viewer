@@ -51,6 +51,7 @@ export class ViewerComponent implements OnInit {
 
 
         this.context.scale(zoomValue, zoomValue);
+        //(((<HTMLCanvasElement>this.canvasRef.nativeElement).width / 2))
         this.context.drawImage(image, 0, 0);
 
         this.context.save();
