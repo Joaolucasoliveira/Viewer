@@ -1,11 +1,10 @@
 <div class="thumbnail-navigation">
   <ul>
-    <li *ngFor="let page of navigationService.pages; let i = index" >
+    <li *ngFor="let page of navigationService.pages_changed$ | async; let i = index" >
       	<app-thumbnail [selected]="navigationService.selectedIndex == i" [page] = "page"
 	 (onClick)="handleThumbnailClick(i)">
    </app-thumbnail>
    <span [class.selected]="navigationService.selectedIndex == i">{{i + 1}}</span>
     </li>
   </ul>
-
 </div>

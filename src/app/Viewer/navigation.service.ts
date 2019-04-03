@@ -13,6 +13,9 @@ export class NavigationService {
 
   private _selected: BehaviorSubject<Page> = new BehaviorSubject(null);
   public selectedPage$ = this._selected.asObservable();
+  
+  private pages_changed: BehaviorSubject<Page[]> = new BehaviorSubject(null);
+  public pages_changed$ = this.pages_changed.asObservable();
 
   constructor(private pageRenderer: PageRendererService) {
 
@@ -49,6 +52,8 @@ export class NavigationService {
     for (let i = 0; i < addedPages.length; i++) {
       this.pages.push(addedPages[i]);
     }
+
+    this.pages_changed.next(this.pages);
 
     this.selectedIndex = 0;
     this._selected.next(this.pages[0]);

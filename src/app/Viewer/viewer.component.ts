@@ -10,7 +10,7 @@ import { NavigationService } from './navigation.service'
 export class ViewerComponent implements OnInit {
   @Input() files: File[] = []
   @ViewChild('canvasDoc') canvasRef: ElementRef;
-  public context: CanvasRenderingContext2D;
+  context: CanvasRenderingContext2D;
 
   constructor(private navigationService: NavigationService) {
 
