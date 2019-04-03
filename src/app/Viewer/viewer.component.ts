@@ -1,6 +1,7 @@
 import { Component, ViewChild, ElementRef, OnInit, Input } from '@angular/core';
 import { File } from './file'
 import { NavigationService } from './navigation.service'
+import { ResizeService } from './resize.service'
 
 @Component({
   selector: "app-viewer",
@@ -13,7 +14,7 @@ export class ViewerComponent implements OnInit {
   @ViewChild('canvasWrapper') canvasWrapper: ElementRef;
   context: CanvasRenderingContext2D;
 
-  constructor(private navigationService: NavigationService) {
+  constructor(private navigationService: NavigationService, private resizeService: ResizeService) {
 
   }
 
@@ -36,12 +37,25 @@ export class ViewerComponent implements OnInit {
     if (page != null) {
       var ctx = this.context;
 
+      this.context.restore();
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+      //this.context.restore();
+      this.context.setTransform(1, 0, 0, 1, 0, 0);
 
       var image = new Image();
       image.src = page.data;
       image.onload = () => {
+
+        let zoomValue = this.resizeService.calculateZoomFit((<HTMLCanvasElement>this.canvasRef.nativeElement).width, (<HTMLCanvasElement>this.canvasRef.nativeElement).height, image.width, image.height);
+
+
+        this.context.scale(zoomValue, zoomValue);
         this.context.drawImage(image, 0, 0);
+
+        this.context.save();
+
+
       }
     }
   }

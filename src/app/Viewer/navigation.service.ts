@@ -9,7 +9,7 @@ import { File } from './file'
 })
 export class NavigationService {
   pages: Page[] = [];
-  selectedIndex: number;
+  selectedIndex: number = -1;
 
   private _selected: BehaviorSubject<Page> = new BehaviorSubject(null);
   public selectedPage$ = this._selected.asObservable();
@@ -54,8 +54,12 @@ export class NavigationService {
       this.pages.push(addedPages[i]);
     }
 
-    this.selectedIndex = 0;
-    this._selected.next(this.pages[0]);
+
+
+    if (this.selectedIndex < 0) {
+      this.selectedIndex = 0;
+      this._selected.next(this.pages[0]);
+    }
 
     this.pages_changed.next(this.pages);
 
