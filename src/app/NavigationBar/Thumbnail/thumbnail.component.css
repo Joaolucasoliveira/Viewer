@@ -14,5 +14,5 @@ img, svg{
 }
 
 .loading{
-  border: 1px solid black;
+  border: 1px dotted #828282;
 }

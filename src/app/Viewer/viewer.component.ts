@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit, Input } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { File } from './file'
 import { NavigationService } from './navigation.service'
 import { ResizeService } from './resize.service'
@@ -8,7 +8,7 @@ import { ResizeService } from './resize.service'
   templateUrl: './viewer.component.html',
   styleUrls: ['./viewer.component.css']
 })
-export class ViewerComponent implements OnInit {
+export class ViewerComponent implements OnInit, OnChanges {
   @Input() files: File[] = []
   @ViewChild('canvasDoc') canvasRef: ElementRef;
   @ViewChild('canvasWrapper') canvasWrapper: ElementRef;
@@ -24,13 +24,17 @@ export class ViewerComponent implements OnInit {
     (<HTMLCanvasElement>this.canvasRef.nativeElement).width = (<HTMLDivElement>this.canvasWrapper.nativeElement).clientWidth;
     (<HTMLCanvasElement>this.canvasRef.nativeElement).height = (<HTMLDivElement>this.canvasWrapper.nativeElement).clientHeight;
 
-    for (let i = 0; i < this.files.length; i++) {
-      setTimeout(() => { this.navigationService.addFile(this.files[i]); }, 1000 * (5 * i))
-    }
+    this.loadFiles(this.files);
 
     this.navigationService.selectedPage$.subscribe(page => {
       this.drawOnCanvas(page);
     });
+  }
+
+  loadFiles(files: File[]) {
+    for (let i = 0; i < this.files.length; i++) {
+      setTimeout(() => { this.navigationService.addFile(this.files[i]); }, 1000 * (5 * i))
+    }
   }
 
   drawOnCanvas(page) {
@@ -49,14 +53,11 @@ export class ViewerComponent implements OnInit {
 
         let zoomValue = this.resizeService.calculateZoomFit((<HTMLCanvasElement>this.canvasRef.nativeElement).width, (<HTMLCanvasElement>this.canvasRef.nativeElement).height, image.width, image.height);
 
-
         this.context.scale(zoomValue, zoomValue);
         //(((<HTMLCanvasElement>this.canvasRef.nativeElement).width / 2))
         this.context.drawImage(image, 0, 0);
 
         this.context.save();
-
-
       }
     }
   }

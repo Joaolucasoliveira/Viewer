@@ -14,7 +14,7 @@
           </li>
           	<li>
 					<i class="fas fa-folder-plus" (click)="newFile.click()" ></i>
-          <input hidden type="file" #newFile (change)="handleFileSelect()"/>
+          <input hidden type="file" #newFile (change)="handleFileSelect($event)"/>
           </li>
           	<li>
 					<i class="fas fa-file-download"></i>
