@@ -1,0 +1,18 @@
+.navigationBar{
+  display: flex;
+}
+
+.navigationBar app-thumbnail + app-thumbnail{
+  margin-left: 5px;
+}
+
+.thumbnails-list{
+float: left;
+}
+
+app-viewer-navControls{
+  float: right;
+  margin-left: 5px;
+  display: flex;
+  align-items: center;
+}

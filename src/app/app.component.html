@@ -1,0 +1,34 @@
+<main>
+	<nav class="menu">
+<ul>
+        
+			
+      </ul>
+	</nav>
+
+	<div class="viewerBody">
+		<div class="sideBar">
+			<ul>
+        	<li>
+					 <i class="far fa-file"></i>
+          </li>
+          <li>
+					 <i class="fas fa-search"></i>
+          </li>
+          	<li>
+					<i class="fas fa-folder-plus"></i>
+          </li>
+          	<li>
+					<i class="fas fa-file-download"></i>
+          </li>
+      </ul>
+		</div>
+		<div class="sideBar-thumbNav">
+      <app-thumbnailNav></app-thumbnailNav>
+		</div>
+
+		<div class="viewerWrapper">
+			<app-viewer [files]="mockFiles"></app-viewer>
+		</div>
+	</div>
+</main>
