@@ -1,4 +1,5 @@
 import { Injectable, OnInit } from '@angular/core'
+import { Observable } from 'rxjs'
 import { Page } from './page'
 import { File } from './file'
 import * as pdfjsLib from 'pdfjs-dist'
@@ -8,34 +9,53 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
   providedIn: "root"
 })
 export class PageRendererService {
-  constructor() {
 
+
+  constructor() {
   }
 
-  renderDocument(file: File): Page[] {
-    var loadingTask = pdfjsLib.getDocument(file.data);
-    loadingTask.promise.then(function (pdf) {
-      pdf.getPage(1).then(function (page) {
-        var scale = 1.5;
-        var viewport = page.getViewport(scale);
+  renderDocument(file: File): Observable<Page[]> {
 
-        // Prepare canvas using PDF page dimensions.
-        var canvas = document.getElementById('the-canvas');
-        var context = canvas.getContext('2d');
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
+    const simpleObservable = new Observable<Page[]>((observer) => {
+      var loadingTask = pdfjsLib.getDocument(file.data);
+      loadingTask.promise.then(function (pdf) {
+        let pageNumber = pdf.numPages;
 
-        // Render PDF page into canvas context.
-        var renderContext = {
-          canvasContext: context,
-          viewport: viewport
-        };
-        page.render(renderContext);
-      })
+        let pages: Page[] = [];
+        for (let i = 0; i < pageNumber; i++) {
+ pages.push({ pageNumber: 1, thumbnailData: "", data: file.data });
+          pdf.getPage(i + 1).then(function (page) {
+          var scale = 1.5;
+          var viewport = page.getViewport(scale, 0);
+
+          // Prepare canvas using PDF page dimensions.
+          var canvas = document.createElement('canvas');
+          var context = canvas.getContext('2d');
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+
+          // Render PDF page into canvas context.
+          var renderContext = {
+            canvasContext: context,
+            viewport: viewport
+          };
+          var renderTask = page.render(renderContext);
+          renderTask.promise.then(function () {
+pages[i].thumbnailData = canvas.toDataURL()
+            // observable execution
+        observer.next(pages);
+        observer.complete()
+            //console.log()
+          });
+        })
+         
+        }
+        
+        
+      });
     });
 
-    //Build the pages objects based on the file.
-    return [{ pageNumber: 1, thumbnailData: "", data: file.data }];
+    return simpleObservable;
   }
 
   renderPage(page: Page) {
