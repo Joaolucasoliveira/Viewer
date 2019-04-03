@@ -36,7 +36,7 @@ export class AppComponent implements OnInit {
         this.navigationService.addFile(file);
       };
 
-      file.readAsDataURL($event.target.files[0]);
+      file.readAsArrayBuffer($event.target.files[0]);
     }
   }
 }
