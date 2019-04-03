@@ -10,6 +10,7 @@ import { NavigationService } from './navigation.service'
 export class ViewerComponent implements OnInit {
   @Input() files: File[] = []
   @ViewChild('canvasDoc') canvasRef: ElementRef;
+  @ViewChild('canvasWrapper') canvasWrapper: ElementRef;
   context: CanvasRenderingContext2D;
 
   constructor(private navigationService: NavigationService) {
@@ -19,8 +20,11 @@ export class ViewerComponent implements OnInit {
   ngOnInit() {
     this.context = (<HTMLCanvasElement>this.canvasRef.nativeElement).getContext('2d');
 
+    (<HTMLCanvasElement>this.canvasRef.nativeElement).width = (<HTMLDivElement>this.canvasWrapper.nativeElement).clientWidth;
+    (<HTMLCanvasElement>this.canvasRef.nativeElement).height = (<HTMLDivElement>this.canvasWrapper.nativeElement).clientHeight;
+
     for (let i = 0; i < this.files.length; i++) {
-      this.navigationService.addFile(this.files[i]);
+      setTimeout(() => { this.navigationService.addFile(this.files[i]); }, 1000 * (5 * i))
     }
 
     this.navigationService.selectedPage$.subscribe(page => {

@@ -15,4 +15,6 @@ export class ThumbnailNavigationComponent {
   handleThumbnailClick(page) {
     this.navigationService.goToPage(page);
   }
+
+  
 }

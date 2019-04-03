@@ -13,7 +13,7 @@ export class NavigationService {
 
   private _selected: BehaviorSubject<Page> = new BehaviorSubject(null);
   public selectedPage$ = this._selected.asObservable();
-  
+
   private pages_changed: BehaviorSubject<Page[]> = new BehaviorSubject(null);
   public pages_changed$ = this.pages_changed.asObservable();
 
@@ -49,13 +49,19 @@ export class NavigationService {
 
   addFile(file: File) {
     var addedPages = this.pageRenderer.renderDocument(file);
+
     for (let i = 0; i < addedPages.length; i++) {
       this.pages.push(addedPages[i]);
     }
 
-    this.pages_changed.next(this.pages);
-
     this.selectedIndex = 0;
     this._selected.next(this.pages[0]);
+
+    this.pages_changed.next(this.pages);
+
+    setTimeout(() => {
+      addedPages = this.pageRenderer.generateThumbnails(addedPages);
+      this.pages_changed.next(this.pages);
+    }, 5000)
   }
 }

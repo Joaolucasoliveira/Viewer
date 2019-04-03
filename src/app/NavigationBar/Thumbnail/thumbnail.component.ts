@@ -20,6 +20,6 @@ export class ThumbnailComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+    console.log('component created')
   }
 }
