@@ -16,5 +16,7 @@ export class ThumbnailNavigationComponent {
     this.navigationService.goToPage(page);
   }
 
-  
+  scroll(){
+    
+  }
 }
