@@ -12,14 +12,16 @@ ul li{
   display: inline-block;
 }
 
-li button{
-  width: 30px;
-}
+
 
 li + li{
   margin-left:2px;
 } */
 
-.btn-group button{
+button{
   width: 40px;
+}
+
+navBar-controls{
+  display:inline-block;
 }

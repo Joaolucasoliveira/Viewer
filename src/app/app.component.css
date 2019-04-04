@@ -44,7 +44,7 @@ font-size:30px;
 
 .sideBar{
  background-color: rgb(51, 51, 51);
-  height: calc(100vh - 50px);
+  height: calc(100vh);
   width: 60px;
   float: left;
   display:flex;
@@ -52,7 +52,7 @@ font-size:30px;
 
 .sideBar ul{
  list-style: none;
- margin: 15px auto;
+ margin: 20px auto;
  padding: 0;
 }
 
@@ -81,9 +81,9 @@ main{
 
 .sideBar-thumbNav{
  display:flex;
- overflow-y: scroll;
+ overflow-y: auto;
  float:left;
-  height: calc(100vh - 50px);
+  height: calc(100vh);
   z-index:100;
 background-color: rgb(41, 40, 40)
 }
@@ -94,7 +94,6 @@ background-color: rgb(41, 40, 40)
     flex-grow: 1;
     height: calc(100vh - 50px);
     background-color: #f3f3f3;
-    padding: 10px;
 }
 
 app-viewer{

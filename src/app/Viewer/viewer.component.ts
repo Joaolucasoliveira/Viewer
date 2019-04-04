@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, Input, SimpleChanges } from '@angular/core';
 import { File } from './file'
 import { NavigationService } from './navigation.service'
 import { ResizeService } from './resize.service'
@@ -8,7 +8,7 @@ import { ResizeService } from './resize.service'
   templateUrl: './viewer.component.html',
   styleUrls: ['./viewer.component.css']
 })
-export class ViewerComponent implements OnInit, OnChanges {
+export class ViewerComponent implements OnInit {
   @Input() files: File[] = []
   @ViewChild('canvasDoc') canvasRef: ElementRef;
   @ViewChild('canvasWrapper') canvasWrapper: ElementRef;

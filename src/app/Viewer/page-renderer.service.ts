@@ -23,35 +23,35 @@ export class PageRendererService {
 
         let pages: Page[] = [];
         for (let i = 0; i < pageNumber; i++) {
- pages.push({ pageNumber: 1, thumbnailData: "", data: file.data });
+
+          pages.push({ pageNumber: i + 1, thumbnailData: "", data: "" });
           pdf.getPage(i + 1).then(function (page) {
-          var scale = 1.5;
-          var viewport = page.getViewport(scale, 0);
+            var scale = 1;
+            var viewport = page.getViewport({scale: scale, rotation: 90});
 
-          // Prepare canvas using PDF page dimensions.
-          var canvas = document.createElement('canvas');
-          var context = canvas.getContext('2d');
-          canvas.height = viewport.height;
-          canvas.width = viewport.width;
+            // Prepare canvas using PDF page dimensions.
+            var canvas = document.createElement('canvas');
+            var context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
 
-          // Render PDF page into canvas context.
-          var renderContext = {
-            canvasContext: context,
-            viewport: viewport
-          };
-          var renderTask = page.render(renderContext);
-          renderTask.promise.then(function () {
-pages[i].thumbnailData = canvas.toDataURL()
-            // observable execution
-        observer.next(pages);
-        observer.complete()
-            //console.log()
-          });
-        })
-         
+            // Render PDF page into canvas context.
+            var renderContext = {
+              canvasContext: context,
+              viewport: viewport
+            };
+            var renderTask = page.render(renderContext);
+            renderTask.promise.then(function () {
+              let dataUri = canvas.toDataURL();
+
+              pages[i].thumbnailData = dataUri;
+              pages[i].data = dataUri;
+              // observable execution
+              observer.next(pages);
+              observer.complete();
+            });
+          })
         }
-        
-        
       });
     });
 
