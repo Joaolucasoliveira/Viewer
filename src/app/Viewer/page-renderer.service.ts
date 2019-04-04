@@ -16,7 +16,7 @@ export class PageRendererService {
 
   renderDocument(file: File): Observable<Page[]> {
 
-    const simpleObservable = new Observable<Page[]>((observer) => {
+    const observable = new Observable<Page[]>((observer) => {
       var loadingTask = pdfjsLib.getDocument(file.data);
       loadingTask.promise.then(function (pdf) {
         let pageNumber = pdf.numPages;
@@ -27,7 +27,7 @@ export class PageRendererService {
           pages.push({ pageNumber: i + 1, thumbnailData: "", data: "" });
           pdf.getPage(i + 1).then(function (page) {
             var scale = 1;
-            var viewport = page.getViewport({scale: scale, rotation: 90});
+            var viewport = page.getViewport({scale: scale});
 
             // Prepare canvas using PDF page dimensions.
             var canvas = document.createElement('canvas');
@@ -55,7 +55,7 @@ export class PageRendererService {
       });
     });
 
-    return simpleObservable;
+    return observable;
   }
 
   renderPage(page: Page) {

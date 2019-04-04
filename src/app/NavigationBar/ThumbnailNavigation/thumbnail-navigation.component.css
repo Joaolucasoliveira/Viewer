@@ -22,3 +22,7 @@ li span{
 li span.selected{
   font-weight:bold;
 }
+
+app-thumbnail{
+  display: inline-block;
+}
