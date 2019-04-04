@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core'
+import { Component, Output, Input, EventEmitter } from '@angular/core'
 
 @Component({
   selector: "app-viewer-navControls",
@@ -6,11 +6,13 @@ import { Component, Output, EventEmitter } from '@angular/core'
   styleUrls: ['./navigation-controls.component.css']
 })
 export class NavigationControlsComponent {
+  @Input() totalPage: number;
+  @Input() actualPage: number
   @Output() nextClick: EventEmitter<any> = new EventEmitter();
   @Output() previousClick: EventEmitter<any> = new EventEmitter();
   @Output() firstPageClick: EventEmitter<any> = new EventEmitter();
   @Output() lastPageClick: EventEmitter<any> = new EventEmitter();
-  
+
   constructor() {
 
   }
@@ -23,7 +25,7 @@ export class NavigationControlsComponent {
     this.previousClick.emit(null);
   }
 
-   handleFirstPageClick() {
+  handleFirstPageClick() {
     this.firstPageClick.emit(null);
   }
 

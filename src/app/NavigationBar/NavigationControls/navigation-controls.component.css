@@ -22,6 +22,32 @@ button{
   width: 40px;
 }
 
+button + button{
+  margin-left: 5px;
+}
+
+.pageDisplay{
+  font-family: lato;
+ display: inline-block;
+ margin: 0 10px;
+}
+
+.pageDisplay input{
+  width: 30px
+}
+
 navBar-controls{
   display:inline-block;
+}
+
+.pageDisplay span{
+  color: #d0d0d0;
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
+    vertical-align: middle
+}
+
+.pageDisplay span + span {
+margin-left: 3px;
 }

@@ -1,14 +1,14 @@
 <div class="navBar-controls">
 
-	<button class="btn btn-sm btn-outline-secondary" (click)="handleFirstPageClick()" type="button"><i class="fas fa-step-backward"></i></button>
-      <button class="btn btn-sm btn-outline-secondary" (click)="handlePreviousClick()" type="button"><i class="fas fa-caret-left"></i></button>
+	<button class="btn btn-sm btn-secondary" (click)="handleFirstPageClick()" type="button"><i class="fas fa-step-backward"></i></button>
+      <button class="btn btn-sm btn-secondary" (click)="handlePreviousClick()" type="button"><i class="fas fa-caret-left"></i></button>
 
-<div>
-      <input type="text" />
+<div *ngIf="actualPage> 0 && totalPage > 0" class="pageDisplay">
+     <span>{{actualPage}}</span>
       <span>/</span>
-      <span>3</span>
+      <span>{{totalPage}}</span>
 </div>
 
-      <button class="btn btn-sm btn-outline-secondary" (click)="handleNextClick()" type="button"><i class="fas fa-caret-right"></i></button>
-      <button class="btn btn-sm btn-outline-secondary" (click)="handleLastPageClick()" type="button"><i class="fas fa-step-forward"></i></button>
+      <button class="btn btn-sm btn-secondary" (click)="handleNextClick()" type="button"><i class="fas fa-caret-right"></i></button>
+      <button class="btn btn-sm btn-secondary" (click)="handleLastPageClick()" type="button"><i class="fas fa-step-forward"></i></button>
 </div>
