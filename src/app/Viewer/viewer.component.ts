@@ -56,6 +56,16 @@ export class ViewerComponent implements OnInit {
     this.drawOnCanvas(this.navigationService.pages[this.navigationService.selectedIndex]);
   }
 
+  @HostListener('mousewheel', ['$event']) onMousewheel(event) {
+    if (event.wheelDelta > 0) {
+      //Si c'est déjà arrivé à la fin, donc, page up.
+      this.navigationService.previousPage();
+    }
+    if (event.wheelDelta < 0) {
+      this.navigationService.nextPage();
+    }
+  }
+
   drawOnCanvas(page) {
     if (page != null) {
       var ctx = this.context;
