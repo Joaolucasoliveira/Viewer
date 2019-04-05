@@ -4,7 +4,9 @@
       <button class="btn btn-sm btn-secondary" (click)="handlePreviousClick()" type="button"><i class="fas fa-caret-left"></i></button>
 
 <div *ngIf="actualPage> 0 && totalPage > 0" class="pageDisplay">
-     <span>{{actualPage}}</span>
+  <form (ngSubmit)="onSubmit()" #pageDisplayForm="ngForm">
+  <input type="text" [(ngModel)]= "displayPage" name="page" />
+  </form>
       <span>/</span>
       <span>{{totalPage}}</span>
 </div>

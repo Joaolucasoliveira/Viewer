@@ -27,4 +27,8 @@ export class NavigationBarComponent {
   handleLastPageClick() {
     this.navigationService.lastPage();
   }
+
+  handlePageType(pageNumber) {
+    this.navigationService.goToPage(pageNumber);
+  }
 }

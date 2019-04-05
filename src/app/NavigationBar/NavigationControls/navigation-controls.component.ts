@@ -1,20 +1,37 @@
-import { Component, Output, Input, EventEmitter } from '@angular/core'
+import { Component, Output, Input, EventEmitter, OnInit } from '@angular/core'
 
 @Component({
   selector: "app-viewer-navControls",
   templateUrl: "./navigation-controls.component.html",
   styleUrls: ['./navigation-controls.component.css']
 })
-export class NavigationControlsComponent {
+export class NavigationControlsComponent implements OnInit {
   @Input() totalPage: number;
-  @Input() actualPage: number
   @Output() nextClick: EventEmitter<any> = new EventEmitter();
   @Output() previousClick: EventEmitter<any> = new EventEmitter();
   @Output() firstPageClick: EventEmitter<any> = new EventEmitter();
   @Output() lastPageClick: EventEmitter<any> = new EventEmitter();
+  @Output() pageTyped: EventEmitter<any> = new EventEmitter();;
+  displayPage: number;
+  private _actualPage: number;
+
+  @Input() set actualPage(value: number) {
+
+    this.displayPage = this._actualPage = value;
+  }
+
+  get actualPage(): number {
+
+    return this._actualPage;
+
+  }
 
   constructor() {
 
+  }
+
+  onSubmit() {
+    this.pageTyped.emit(this.displayPage - 1);
   }
 
   handleNextClick() {
@@ -31,5 +48,9 @@ export class NavigationControlsComponent {
 
   handleLastPageClick() {
     this.lastPageClick.emit(null);
+  }
+
+  ngOnInit() {
+
   }
 }

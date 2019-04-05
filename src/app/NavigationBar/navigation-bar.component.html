@@ -1,4 +1,5 @@
 <div class="navigationBar">
-	<app-viewer-navControls [totalPage]="navigationService.pages.length" [actualPage]="navigationService.selectedIndex + 1" (nextClick)="handleNextClick()" (previousClick)="handlePreviousClick()" (firstPageClick)="handleFirstPageClick()"
+	<app-viewer-navControls [totalPage]="navigationService.pages.length" [actualPage]="navigationService.selectedIndex + 1" (nextClick)="handleNextClick()"
+	 (pageTyped)="handlePageType($event)" (previousClick)="handlePreviousClick()" (firstPageClick)="handleFirstPageClick()"
 	 (lastPageClick)="handleLastPageClick()"></app-viewer-navControls>
 </div>

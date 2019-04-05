@@ -92,8 +92,8 @@ background-color: rgb(41, 40, 40)
  display: flex;
    
     flex-grow: 1;
-    height: calc(100vh - 50px);
-    background-color: #f3f3f3;
+    height: calc(100vh);
+    background-color: #252525
 }
 
 app-viewer{

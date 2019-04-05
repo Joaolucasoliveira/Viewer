@@ -53,3 +53,20 @@ navBar-controls{
 .pageDisplay span + span {
 margin-left: 3px;
 }
+
+.pageDisplay input[type=text]{
+  width: 25px;
+    height: 10px;
+    border: none;
+    background: #292828;
+    color: #d0d0d0;
+    text-align: center;
+    font-family: lato;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 0;
+}
+
+form{
+  display:inline;
+}
