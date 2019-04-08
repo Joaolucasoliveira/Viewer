@@ -70,7 +70,7 @@ export class PageRendererService {
             observer.next(page);
             observer.complete();
 
-            console.log("Rendered page")
+            console.log("Rendered page");
           });
         });
       });

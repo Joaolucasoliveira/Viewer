@@ -1,14 +1,14 @@
-import { Injectable, OnInit } from '@angular/core'
+import { Injectable } from '@angular/core'
 import { PageRendererService } from './page-renderer.service'
-import { BehaviorSubject, Observable } from 'rxjs'
-import { switchMap, tap, map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs'
+import { switchMap, switchAll, tap, map } from 'rxjs/operators';
 import { Page } from './page'
 import { File } from './file'
 
 @Injectable({
   providedIn: "root"
 })
-export class NavigationService implements OnInit {
+export class NavigationService {
   pages: Page[] = [];
   documents: Document[] = [];
   selectedIndex: number = -1;
@@ -19,15 +19,20 @@ export class NavigationService implements OnInit {
   private pages_changed: BehaviorSubject<Page[]> = new BehaviorSubject(null);
   public pages_changed$ = this.pages_changed.asObservable();
 
-  private _selectedIndex: BehaviorSubject<number> = new BehaviorSubject(null);
+  private _selectedIndex: BehaviorSubject<Page> = new BehaviorSubject(null);
   private selectedIndex_changed$ = this._selectedIndex.asObservable();
 
+  renderSubscription;
+
   constructor(private pageRenderer: PageRendererService) {
-    this.selectedIndex_changed$.pipe(switchMap(val => {
-      console.log("arrived here");
-      return this.pageRenderer.renderPage(this.pages[val], this.documents[0].loadedFile);
-      
-    })).subscribe(() => { console.log("arrived here") });
+
+    this.selectedIndex_changed$.pipe(tap(() => { console.log("ss"); console.log(this.pageRenderer); }), switchMap(val => this.pageRenderer.renderPage(val, this.documents[0].loadedFile))).subscribe(() => {
+      console.log("ok");
+    });
+
+    // this.selectedIndex_changed$.pipe(switchMap(f, i => {})).subscribe(() => {
+    //   console.log("test");
+    // });
   }
 
   nextPage() {
@@ -47,19 +52,29 @@ export class NavigationService implements OnInit {
   }
 
   goToPage(pageIndex: number) {
+
     if (pageIndex < 0)
       pageIndex = this.pages.length - 1;
     else if (pageIndex > this.pages.length - 1)
       pageIndex = 0;
 
-    this._selectedIndex.next(pageIndex);
+    // //this._selectedIndex.next(pageIndex);
     // this.selectedIndex = pageIndex;
+    //this._selected.next(this.pages[pageIndex]);
+    this._selectedIndex.next(this.selectedIndex);
+    // if (this.pages[pageIndex].data != null) {
 
-    // if(this.pages[pageIndex].data != null){
-    //   this._selected.next(this.pages[pageIndex]);
     // }
-    // else{
+    // else {
 
+    //   // this.renderSubscription = this.pageRenderer.renderPage(this.pages[this.selectedIndex], this.documents[0].loadedFile); this.renderSubscription.subscribe(x => {
+    //   //   console.log("arrived here");
+    //   //   this._selected.next(x);
+    //   // });
+
+    //   //  if (this.renderSubscription != null) {
+    //   //   this.renderSubscription.unsubscribe();
+    //   // }
     // }
   }
 
@@ -78,10 +93,5 @@ export class NavigationService implements OnInit {
 
       this.pages_changed.next(this.pages);
     });
-  }
-
-  ngOnInit() {
-    console.log("init service");
-
   }
 }
