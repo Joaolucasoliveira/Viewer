@@ -1,14 +1,16 @@
-import { Injectable } from '@angular/core'
+import { Injectable, OnInit } from '@angular/core'
 import { PageRendererService } from './page-renderer.service'
 import { BehaviorSubject, Observable } from 'rxjs'
+import { switchMap, tap, map } from 'rxjs/operators';
 import { Page } from './page'
 import { File } from './file'
 
 @Injectable({
   providedIn: "root"
 })
-export class NavigationService {
+export class NavigationService implements OnInit {
   pages: Page[] = [];
+  documents: Document[] = [];
   selectedIndex: number = -1;
 
   private _selected: BehaviorSubject<Page> = new BehaviorSubject(null);
@@ -17,8 +19,15 @@ export class NavigationService {
   private pages_changed: BehaviorSubject<Page[]> = new BehaviorSubject(null);
   public pages_changed$ = this.pages_changed.asObservable();
 
-  constructor(private pageRenderer: PageRendererService) {
+  private _selectedIndex: BehaviorSubject<number> = new BehaviorSubject(null);
+  private selectedIndex_changed$ = this._selectedIndex.asObservable();
 
+  constructor(private pageRenderer: PageRendererService) {
+    this.selectedIndex_changed$.pipe(switchMap(val => {
+      console.log("arrived here");
+      return this.pageRenderer.renderPage(this.pages[val], this.documents[0].loadedFile);
+      
+    })).subscribe(() => { console.log("arrived here") });
   }
 
   nextPage() {
@@ -43,27 +52,36 @@ export class NavigationService {
     else if (pageIndex > this.pages.length - 1)
       pageIndex = 0;
 
-    this.selectedIndex = pageIndex;
-    this._selected.next(this.pages[pageIndex]);
+    this._selectedIndex.next(pageIndex);
+    // this.selectedIndex = pageIndex;
+
+    // if(this.pages[pageIndex].data != null){
+    //   this._selected.next(this.pages[pageIndex]);
+    // }
+    // else{
+
+    // }
   }
 
   addFile(file: File) {
-    this.pageRenderer.renderDocument(file).subscribe(addedPages => {
-      for (let i = 0; i < addedPages.length; i++) {
-        this.pages.push(addedPages[i]);
+    this.pageRenderer.renderDocument(file).subscribe(document => {
+
+      this.documents.push(document);
+
+      for (let i = 0; i < document.pages.length; i++) {
+        this.pages.push(document.pages[i]);
       }
 
       if (this.selectedIndex < 0) {
-        this.selectedIndex = 0;
-        this._selected.next(this.pages[0]);
+        this._selectedIndex.next(0);
       }
 
       this.pages_changed.next(this.pages);
-
-      // setTimeout(() => {
-      //   addedPages = this.pageRenderer.generateThumbnails(addedPages);
-      //   this.pages_changed.next(this.pages);
-      // }, 5000);
     });
+  }
+
+  ngOnInit() {
+    console.log("init service");
+
   }
 }
