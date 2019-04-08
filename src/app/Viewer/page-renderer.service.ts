@@ -30,22 +30,25 @@ export class PageRendererService {
           pages.push({ pageNumber: i + 1, thumbnailData: "", data: null });
         }
 
-        observer.next({loadedFile: file, pages: pages});
+        observer.next({ loadedFile: file, pages: pages });
       });
+
+      return () => { console.log("unsubscribed") };
     });
 
     return observable;
   }
 
-  renderPage(page: Page, file: File) {
+  renderPage(page: Page, file: File) : Observable<Page> {
 
+    console.log(page, file);
     const observable = new Observable<Page>((observer) => {
       var loadingTask = pdfjsLib.getDocument(file.data);
 
       loadingTask.promise.then(function (pdf) {
 
         pdf.getPage(page.pageNumber).then(function (page) {
-          
+
           var scale = 1; //I must pass the correct scale for better render quality.
           var viewport = page.getViewport({ scale: scale });
 
@@ -74,6 +77,12 @@ export class PageRendererService {
           });
         });
       });
+      return ({
+        unsubscribe() {
+          console.log('unsubscribbed');
+        }
+      });
+      //return () => { console.log("unsubscribed")};
     });
 
     return observable;

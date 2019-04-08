@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core'
 import { PageRendererService } from './page-renderer.service'
-import { BehaviorSubject, Observable, of } from 'rxjs'
-import { switchMap, switchAll, tap, map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, from } from 'rxjs'
+import { switchMap, switchAll, tap, map, debounceTime } from 'rxjs/operators';
 import { Page } from './page'
 import { File } from './file'
+import { Document } from './document'
 
 @Injectable({
   providedIn: "root"
@@ -19,16 +20,14 @@ export class NavigationService {
   private pages_changed: BehaviorSubject<Page[]> = new BehaviorSubject(null);
   public pages_changed$ = this.pages_changed.asObservable();
 
-  private _selectedIndex: BehaviorSubject<Page> = new BehaviorSubject(null);
+  private _selectedIndex: BehaviorSubject<number> = new BehaviorSubject(null);
   private selectedIndex_changed$ = this._selectedIndex.asObservable();
 
   renderSubscription;
 
   constructor(private pageRenderer: PageRendererService) {
 
-    this.selectedIndex_changed$.pipe(tap(() => { console.log("ss"); console.log(this.pageRenderer); }), switchMap(val => this.pageRenderer.renderPage(val, this.documents[0].loadedFile))).subscribe(() => {
-      console.log("ok");
-    });
+    
 
     // this.selectedIndex_changed$.pipe(switchMap(f, i => {})).subscribe(() => {
     //   console.log("test");
@@ -49,6 +48,11 @@ export class NavigationService {
 
   lastPage() {
     this.goToPage(this.pages.length - 1);
+
+    this.selectedIndex_changed$.pipe(debounceTime(500), tap(() => { console.log("ss"); console.log(this.pageRenderer); }), switchMap((val) => {return this.pageRenderer.renderPage(this.pages[val], this.documents[0].loadedFile); })).subscribe(() => {
+      console.log("ok");
+      alert("ok");
+    });
   }
 
   goToPage(pageIndex: number) {
@@ -59,9 +63,9 @@ export class NavigationService {
       pageIndex = 0;
 
     // //this._selectedIndex.next(pageIndex);
-    // this.selectedIndex = pageIndex;
+    this.selectedIndex = pageIndex;
     //this._selected.next(this.pages[pageIndex]);
-    this._selectedIndex.next(this.selectedIndex);
+    this._selectedIndex.next(pageIndex);
     // if (this.pages[pageIndex].data != null) {
 
     // }
