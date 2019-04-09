@@ -26,9 +26,10 @@ export class NavigationService {
   renderSubscription;
 
   constructor(private pageRenderer: PageRendererService) {
-
-    
-
+ this.selectedIndex_changed$.pipe(debounceTime(500), tap(() => { console.log("ss"); console.log(this.pageRenderer); }), switchMap((val) => { return this.pageRenderer.renderPage(this.pages[val], this.documents[0].loadedFile); })).subscribe(() => {
+      console.log("ok");
+      alert("ok");
+    });
     // this.selectedIndex_changed$.pipe(switchMap(f, i => {})).subscribe(() => {
     //   console.log("test");
     // });
@@ -48,11 +49,6 @@ export class NavigationService {
 
   lastPage() {
     this.goToPage(this.pages.length - 1);
-
-    this.selectedIndex_changed$.pipe(debounceTime(500), tap(() => { console.log("ss"); console.log(this.pageRenderer); }), switchMap((val) => {return this.pageRenderer.renderPage(this.pages[val], this.documents[0].loadedFile); })).subscribe(() => {
-      console.log("ok");
-      alert("ok");
-    });
   }
 
   goToPage(pageIndex: number) {
@@ -68,6 +64,8 @@ export class NavigationService {
     this._selectedIndex.next(pageIndex);
     // if (this.pages[pageIndex].data != null) {
 
+
+   
     // }
     // else {
 

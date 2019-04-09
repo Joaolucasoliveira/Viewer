@@ -12,7 +12,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
 export class PageRendererService {
 
   constructor() {
-
+    
   }
 
   renderDocument(file: File): Observable<Document> {
