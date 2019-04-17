@@ -12,7 +12,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
 export class PageRendererService {
 
   constructor() {
-    
+
   }
 
   renderDocument(file: File): Observable<Document> {
@@ -39,7 +39,7 @@ export class PageRendererService {
     return observable;
   }
 
-  renderPage(page: Page, file: File) : Observable<Page> {
+  renderPage(page: Page, file: File): Observable<Page> {
 
     console.log(page, file);
     const observable = new Observable<Page>((observer) => {
@@ -82,7 +82,6 @@ export class PageRendererService {
           console.log('unsubscribbed');
         }
       });
-      //return () => { console.log("unsubscribed")};
     });
 
     return observable;

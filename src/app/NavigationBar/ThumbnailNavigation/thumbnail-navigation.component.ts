@@ -32,11 +32,7 @@ export class ThumbnailNavigationComponent implements OnInit {
     var elemTop = rect.top;
     var elemBottom = rect.bottom;
 
-    console.log(rect);
-    // Only completely visible elements return true:
     return elemTop >= 0 && (elemBottom <= window.innerHeight);
-    // Partially visible elements return true:
-    //return elemTop < window.innerHeight && elemBottom >= 0;
   }
 
   ngOnInit() {

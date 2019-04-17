@@ -26,10 +26,6 @@ export class NavigationService {
   renderSubscription;
 
   constructor(private pageRenderer: PageRendererService) {
- this.selectedIndex_changed$.pipe(debounceTime(500), tap(() => { console.log("ss"); console.log(this.pageRenderer); }), switchMap((val) => { return this.pageRenderer.renderPage(this.pages[val], this.documents[0].loadedFile); })).subscribe(() => {
-      console.log("ok");
-      alert("ok");
-    });
     // this.selectedIndex_changed$.pipe(switchMap(f, i => {})).subscribe(() => {
     //   console.log("test");
     // });
@@ -48,6 +44,7 @@ export class NavigationService {
   }
 
   lastPage() {
+
     this.goToPage(this.pages.length - 1);
   }
 
@@ -58,14 +55,12 @@ export class NavigationService {
     else if (pageIndex > this.pages.length - 1)
       pageIndex = 0;
 
-    // //this._selectedIndex.next(pageIndex);
     this.selectedIndex = pageIndex;
-    //this._selected.next(this.pages[pageIndex]);
+
+    console.log("Chegou aqui");
     this._selectedIndex.next(pageIndex);
     // if (this.pages[pageIndex].data != null) {
 
-
-   
     // }
     // else {
 
@@ -90,6 +85,14 @@ export class NavigationService {
       }
 
       if (this.selectedIndex < 0) {
+        if (this.renderSubscription == null) {
+          this.renderSubscription = this.selectedIndex_changed$.pipe(debounceTime(500), tap(() => {
+            console.log("Started Rendering");
+          }), switchMap((val) => { return this.pageRenderer.renderPage(this.pages[val], this.documents[0].loadedFile); })).subscribe((page) => {
+            this.pages[this.selectedIndex] = page;
+            this._selected.next(page);
+          });
+        }
         this._selectedIndex.next(0);
       }
 
