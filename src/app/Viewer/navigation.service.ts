@@ -81,21 +81,15 @@ export class NavigationService {
         this.pages.push(document.pages[i]);
 
         this.pageRenderer.generateThumbnail(document.pages[i], document.loadedFile, 1).subscribe(page => {
-          
-          //console.log("thumbnail generated");
           this.pages[i] = page;
-          // this.pages_changed.next(this.pages);
+          this.pages_changed.next(this.pages);
         });
       }
-
-
 
       if (this.selectedIndex < 0) {
         this.subscribeToPageChange();
         this._selectedIndex.next(0);
       }
-
-      this.pages_changed.next(this.pages);
     });
   }
 }
