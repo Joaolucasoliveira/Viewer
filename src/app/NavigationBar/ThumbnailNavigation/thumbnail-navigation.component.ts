@@ -17,8 +17,6 @@ export class ThumbnailNavigationComponent implements OnInit {
 
   handleThumbnailClick(page, el) {
     this.navigationService.goToPage(page);
-    // var target = event.target || event.srcElement || event.currentTarget;
-    // this.scroll(target, true);
   }
 
   scroll(el, selected: boolean) {
@@ -40,8 +38,6 @@ export class ThumbnailNavigationComponent implements OnInit {
 
       try {
         let element = this.document.getElementById("thumbId" + (page.pageNumber - 1));
-        console.log("thumbId" + (page.pageNumber - 1));
-        console.log(element);
 
         if (!this.isScrolledIntoView(element))
           this.scroll(element, true);
@@ -49,8 +45,6 @@ export class ThumbnailNavigationComponent implements OnInit {
       catch (e) {
         console.log(e);
       }
-
-      // this.scroll(element, true);
     });
   }
 }

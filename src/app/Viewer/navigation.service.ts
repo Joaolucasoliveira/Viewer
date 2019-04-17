@@ -12,7 +12,7 @@ import { Document } from './document'
 export class NavigationService {
   pages: Page[] = [];
   documents: Document[] = [];
-  selectedIndex: number = -1;
+  selectedIndex: number = -1; //Default selected index, before page select
 
   private _selected: BehaviorSubject<Page> = new BehaviorSubject(null);
   public selectedPage$ = this._selected.asObservable();
@@ -26,9 +26,7 @@ export class NavigationService {
   renderSubscription;
 
   constructor(private pageRenderer: PageRendererService) {
-    // this.selectedIndex_changed$.pipe(switchMap(f, i => {})).subscribe(() => {
-    //   console.log("test");
-    // });
+
   }
 
   nextPage() {
@@ -44,7 +42,6 @@ export class NavigationService {
   }
 
   lastPage() {
-
     this.goToPage(this.pages.length - 1);
   }
 
@@ -57,22 +54,22 @@ export class NavigationService {
 
     this.selectedIndex = pageIndex;
 
-    console.log("Chegou aqui");
     this._selectedIndex.next(pageIndex);
-    // if (this.pages[pageIndex].data != null) {
+  }
 
-    // }
-    // else {
+  subscribeToPageChange() {
+    if (this.renderSubscription == null) {
+      this.renderSubscription = this.selectedIndex_changed$.pipe(debounceTime(500), tap(() => {
+        console.log("Started rendering");
 
-    //   // this.renderSubscription = this.pageRenderer.renderPage(this.pages[this.selectedIndex], this.documents[0].loadedFile); this.renderSubscription.subscribe(x => {
-    //   //   console.log("arrived here");
-    //   //   this._selected.next(x);
-    //   // });
+      }), switchMap((val) => { return this.pageRenderer.renderPage(this.pages[val], this.documents[0].loadedFile); })).subscribe((page) => {
 
-    //   //  if (this.renderSubscription != null) {
-    //   //   this.renderSubscription.unsubscribe();
-    //   // }
-    // }
+        console.log("Finished rendering");
+
+        this.pages[this.selectedIndex] = page;
+        this._selected.next(page);
+      });
+    }
   }
 
   addFile(file: File) {
@@ -82,17 +79,19 @@ export class NavigationService {
 
       for (let i = 0; i < document.pages.length; i++) {
         this.pages.push(document.pages[i]);
+
+        this.pageRenderer.generateThumbnail(document.pages[i], document.loadedFile, 1).subscribe(page => {
+          
+          //console.log("thumbnail generated");
+          this.pages[i] = page;
+          // this.pages_changed.next(this.pages);
+        });
       }
 
+
+
       if (this.selectedIndex < 0) {
-        if (this.renderSubscription == null) {
-          this.renderSubscription = this.selectedIndex_changed$.pipe(debounceTime(500), tap(() => {
-            console.log("Started Rendering");
-          }), switchMap((val) => { return this.pageRenderer.renderPage(this.pages[val], this.documents[0].loadedFile); })).subscribe((page) => {
-            this.pages[this.selectedIndex] = page;
-            this._selected.next(page);
-          });
-        }
+        this.subscribeToPageChange();
         this._selectedIndex.next(0);
       }
 
